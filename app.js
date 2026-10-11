@@ -1,0 +1,15 @@
+'use strict';
+const $=s=>document.querySelector(s);
+const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+let paused=reduced.matches,frame=0,mouse={x:innerWidth/2,y:innerHeight/2},pointer={x:-100,y:-100},cursor={x:-100,y:-100},visible=true;
+const motionButton=$('#motion'),collage=$('.collage-space'),cards=[...document.querySelectorAll('.art-card')];
+function setMotion(value){paused=value;document.documentElement.classList.toggle('motion-paused',paused);document.body.classList.toggle('js-motion',!paused);motionButton.setAttribute('aria-pressed',String(paused));motionButton.querySelector('span').textContent=paused?'off':'on';motionButton.setAttribute('aria-label',paused?'Enable animations':'Pause animations');if(paused){collage.style.transform='none';cards.forEach(card=>card.style.transform='');}else if(!frame)frame=requestAnimationFrame(tick);}
+setMotion(paused);motionButton.addEventListener('click',()=>setMotion(!paused));reduced.addEventListener('change',e=>setMotion(e.matches));
+const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}}),{threshold:.08});document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+document.addEventListener('pointermove',e=>{mouse={x:e.clientX,y:e.clientY};pointer=mouse;});
+function tick(time=0){frame=0;if(paused||!visible)return;cursor.x+=(pointer.x-cursor.x)*.16;cursor.y+=(pointer.y-cursor.y)*.16;const c=$('.cursor'),size=c.classList.contains('active')?35:6;c.style.transform=`translate3d(${cursor.x-size}px,${cursor.y-size}px,0)`;const max=document.documentElement.scrollHeight-innerHeight;$('.progress').style.transform=`scaleX(${max>0?scrollY/max:0})`;const box=$('.collage').getBoundingClientRect();if(box.bottom>0&&box.top<innerHeight){const x=(mouse.x/innerWidth-.5)*10,y=(mouse.y/innerHeight-.5)*6;collage.style.transform=`rotateX(${-y}deg) rotateY(${x}deg)`;const fan=Math.min(1,Math.max(0,-box.top/500));cards.forEach((card,i)=>card.style.transform=`translate3d(${(i-1.5)*fan*55}px,${fan*25+Math.sin(time/1700+i*.9)*9}px,${[ -35,65,25,-30][i]-fan*120+Math.cos(time/2200+i)*12}px) rotate(${[-13,-5,6,14][i]+(i-1.5)*fan*8+Math.sin(time/2500+i)*2}deg)`);}
+frame=requestAnimationFrame(tick);}
+document.addEventListener('visibilitychange',()=>{visible=!document.hidden;if(visible&&!paused&&!frame)frame=requestAnimationFrame(tick);});
+window.addEventListener('scroll',()=>{if(paused){const max=document.documentElement.scrollHeight-innerHeight;$('.progress').style.transform=`scaleX(${max>0?scrollY/max:0})`;}},{passive:true});
+if(matchMedia('(pointer:fine)').matches){document.querySelectorAll('.magnetic').forEach(button=>{button.addEventListener('pointermove',e=>{if(paused)return;const r=button.getBoundingClientRect();button.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.13}px,${(e.clientY-r.top-r.height/2)*.18}px)`;});button.addEventListener('pointerleave',()=>button.style.transform='none');});}
+
