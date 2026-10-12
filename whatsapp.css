@@ -1,0 +1,129 @@
+/* Floating WhatsApp contact — integrated with the portfolio motion system */
+.whatsapp-float{
+  --wa:#25d366;
+  position:fixed;
+  right:clamp(16px,2.2vw,32px);
+  bottom:clamp(16px,2.2vw,30px);
+  z-index:88;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-height:58px;
+  padding:8px 11px 8px 9px;
+  border:1px solid rgba(32,35,31,.16);
+  border-radius:999px;
+  background:rgba(247,247,242,.9);
+  color:#20231f;
+  box-shadow:0 14px 42px rgba(31,37,28,.15),0 2px 8px rgba(31,37,28,.08);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  overflow:hidden;
+  isolation:isolate;
+  transform:translateY(14px) scale(.96);
+  opacity:0;
+  transition:opacity .55s ease,transform .55s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease,border-color .3s ease;
+}
+.whatsapp-float.is-ready{opacity:1;transform:none}
+.whatsapp-float:before{
+  content:"";
+  position:absolute;
+  width:92px;height:92px;
+  left:-24px;top:50%;
+  border-radius:50%;
+  background:radial-gradient(circle,var(--wa) 0 32%,rgba(37,211,102,.28) 33% 49%,rgba(37,211,102,0) 70%);
+  transform:translateY(-50%) scale(.78);
+  opacity:.42;
+  z-index:-1;
+  transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .3s ease;
+}
+.whatsapp-float:hover,
+.whatsapp-float:focus-visible{
+  border-color:rgba(37,211,102,.58);
+  box-shadow:0 20px 54px rgba(37,211,102,.2),0 7px 18px rgba(31,37,28,.1);
+}
+.whatsapp-float:hover:before,
+.whatsapp-float:focus-visible:before{transform:translateY(-50%) scale(1.05);opacity:.72}
+.whatsapp-icon{
+  position:relative;
+  flex:0 0 42px;
+  width:42px;height:42px;
+  display:grid;place-items:center;
+  border-radius:50%;
+  background:var(--wa);
+  color:#fff;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.28),0 7px 18px rgba(37,211,102,.3);
+}
+.whatsapp-icon svg{width:23px;height:23px;display:block;fill:currentColor}
+.whatsapp-status{
+  position:absolute;
+  width:8px;height:8px;
+  right:0;top:1px;
+  background:#fff;
+  border:2px solid var(--wa);
+  border-radius:50%;
+}
+.whatsapp-copy{
+  display:grid;
+  gap:1px;
+  max-width:0;
+  opacity:0;
+  transform:translateX(-9px);
+  overflow:hidden;
+  white-space:nowrap;
+  transition:max-width .45s cubic-bezier(.2,.8,.2,1),opacity .25s ease,transform .45s cubic-bezier(.2,.8,.2,1);
+}
+.whatsapp-copy small{
+  font-size:7px;
+  line-height:1;
+  letter-spacing:1.35px;
+  font-weight:700;
+  color:#71766c;
+}
+.whatsapp-copy strong{
+  font-size:11px;
+  line-height:1.2;
+  font-weight:700;
+}
+.whatsapp-arrow{
+  display:grid;place-items:center;
+  width:0;
+  opacity:0;
+  transform:translateX(-7px) rotate(-10deg);
+  font-size:13px;
+  transition:width .35s ease,opacity .25s ease,transform .4s cubic-bezier(.2,.8,.2,1);
+}
+.whatsapp-float:hover .whatsapp-copy,
+.whatsapp-float:focus-visible .whatsapp-copy{max-width:150px;opacity:1;transform:none}
+.whatsapp-float:hover .whatsapp-arrow,
+.whatsapp-float:focus-visible .whatsapp-arrow{width:18px;opacity:1;transform:none}
+.whatsapp-float:focus-visible{outline:3px solid #5465ff;outline-offset:6px}
+
+body.js-motion:not(.motion-paused) .whatsapp-icon{animation:wa-breathe 3.2s ease-in-out infinite}
+body.js-motion:not(.motion-paused) .whatsapp-status{animation:wa-status 2.4s ease-in-out infinite}
+@keyframes wa-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+@keyframes wa-status{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.55)}50%{box-shadow:0 0 0 5px rgba(255,255,255,0)}}
+
+@media(max-width:640px){
+  .whatsapp-float{
+    min-height:54px;
+    padding:6px;
+    background:rgba(247,247,242,.94);
+  }
+  .whatsapp-icon{width:42px;height:42px;flex-basis:42px}
+  .whatsapp-copy,.whatsapp-arrow{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .whatsapp-float,.whatsapp-float:before,.whatsapp-copy,.whatsapp-arrow,.whatsapp-icon,.whatsapp-status{
+    animation:none!important;
+    transition:none!important;
+  }
+}
+html.motion-paused .whatsapp-float,
+html.motion-paused .whatsapp-float:before,
+html.motion-paused .whatsapp-copy,
+html.motion-paused .whatsapp-arrow,
+html.motion-paused .whatsapp-icon,
+html.motion-paused .whatsapp-status{
+  animation:none!important;
+  transition:none!important;
+}
