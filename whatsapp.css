@@ -19,11 +19,10 @@
   -webkit-backdrop-filter:blur(16px);
   overflow:hidden;
   isolation:isolate;
-  transform:translateY(14px) scale(.96);
-  opacity:0;
+  transform:none;
+  opacity:1;
   transition:opacity .55s ease,transform .55s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease,border-color .3s ease;
 }
-.whatsapp-float.is-ready{opacity:1;transform:none}
 .whatsapp-float:before{
   content:"";
   position:absolute;
