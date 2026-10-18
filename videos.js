@@ -238,5 +238,17 @@ window.PORTFOLIO_FILMS = [
     "sourceTitle": "Scenario simulator",
     "duration": "2:07",
     "selected": false
+  },
+  {
+    "id": "q5cpK4NYrBg",
+    "title": "animated POC",
+    "category": "Motion",
+    "label": "Horizontal film",
+    "format": "landscape",
+    "source": "https://youtu.be/q5cpK4NYrBg",
+    "poster": "https://i.ytimg.com/vi/q5cpK4NYrBg/hqdefault.jpg",
+    "tone": "violet",
+    "description": "",
+    "selected": false
   }
 ];
